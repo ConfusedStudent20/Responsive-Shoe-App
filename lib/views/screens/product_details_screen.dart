@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:provider/provider.dart';
+import 'package:shoes_ui/provider/brand_build_provider.dart';
 import 'package:shoes_ui/utils/colors.dart';
 import 'package:shoes_ui/views/app_textStyle.dart';
 
@@ -28,14 +30,6 @@ class ProductDetailsScreen extends StatefulWidget {
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
-  double initialRating = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    initialRating = widget.rating;
-  }
-
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -52,17 +46,34 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         centerTitle: true,
         backgroundColor: appBarColor,
         automaticallyImplyLeading: true,
-        actions: [
-          Padding(
-            padding: screenWidth > 768
-                ? const EdgeInsets.only(right: 20.0)
-                : const EdgeInsets.all(0.0),
-            child: IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.favorite_border),
-            ),
-          ),
-        ],
+        //  actions: [
+        //      Padding(
+        //       padding: screenWidth > 768
+        //           ? const EdgeInsets.only(right: 20.0)
+        //           : const EdgeInsets.all(0.0),
+        //       child: Consumer<FavoriteProducts>(
+        //         builder: (context, value, child) {
+        //           return IconButton(
+        //             onPressed: () {
+        //               if (value.favProduct.contains(widget)) {
+        //                 value.removeFav(widget);
+        //               } else {
+        //                 value.addFavProduct(widget);
+        //               }
+        //             },
+        //             icon: value.favProduct.contains(widget)
+        //                 ? const Icon(Icons.favorite)
+        //                 : const Icon(Icons.favorite_border),
+        //             color: value.favProduct.contains(widget)
+        //                 ? Colors.red
+        //                 : Colors.black,
+        //           );
+        //         },
+        //       ),
+        //     ),
+        //   ],
+
+        // ),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -81,31 +92,32 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     'Rating:',
                     style: appStyle(textColor, FontWeight.normal, 16),
                   ),
-                  RatingBar.builder(
-                    maxRating: 5.0,
-                    itemSize: 25.0,
-                    initialRating: widget.rating,
-                    minRating: 0.0,
-                    allowHalfRating: false,
-                    direction: Axis.horizontal,
-                    itemCount: 5,
-                    itemPadding: const EdgeInsets.symmetric(horizontal: 2.0),
-                    itemBuilder: (context, index) {
-                      return const Icon(
-                        Icons.star,
-                        color: Colors.amber,
-                      );
-                    },
-                    onRatingUpdate: (initialRating) {
-                      setState(
-                        () {
-                          this.initialRating = initialRating;
-                        },
-                      );
-                    },
-                  ),
+                  Consumer<RatingProvider>(
+                      builder: (BuildContext context, value, child) {
+                    return RatingBar.builder(
+                      maxRating: 5.0,
+                      itemSize: 25.0,
+                      initialRating: widget.rating,
+                      minRating: 0.0,
+                      allowHalfRating: false,
+                      direction: Axis.horizontal,
+                      itemCount: 5,
+                      itemPadding: const EdgeInsets.symmetric(horizontal: 2.0),
+                      itemBuilder: (context, index) {
+                        return const Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                        );
+                      },
+                      onRatingUpdate: (updateRating) {
+                        value.rateProducts(updateRating);
+                      },
+                    );
+                  }),
                   SizedBox(
-                    width: screenWidth * 0.24,
+                    width: screenWidth > 768
+                        ? screenWidth * 0.24
+                        : screenWidth * 0.06,
                   ),
                   Text(
                     '\$ ${widget.price}',
@@ -121,33 +133,45 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 height: 14,
               ),
               Text('Sizes', style: appStyle(textColor, FontWeight.bold, 16)),
-              SizedBox(
-                height: 50,
-                child: ListView.separated(
-                  itemCount: widget.size.length,
-                  scrollDirection: Axis.horizontal,
-                  shrinkWrap: true,
-                  itemBuilder: (BuildContext context, index) {
-                    return SizedBox(
-                      height: 50,
-                      width: 50,
-                      child: Card(
-                        elevation: 3,
-                        color: cardColor,
-                        child: Center(
-                          child: Text(
-                            widget.size[index].toString(),
-                            style: appStyle(Colors.white, FontWeight.bold, 16),
+              Consumer<ShoeSizeProvider>(
+                builder: (BuildContext context, value, child) {
+                  return SizedBox(
+                    height: 50,
+                    child: ListView.separated(
+                      itemCount: widget.size.length,
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            value.selectSize(index);
+                          },
+                          child: SizedBox(
+                            height: 50,
+                            width: 50,
+                            child: Card(
+                              elevation: 3,
+                              color: value.currentIndex == index
+                                  ? Colors.blue
+                                  : cardColor,
+                              child: Center(
+                                child: Text(
+                                  widget.size[index].toString(),
+                                  style: appStyle(
+                                      Colors.white, FontWeight.bold, 16),
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, index) =>
+                          const SizedBox(
+                        width: 10.0,
                       ),
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, index) =>
-                      const SizedBox(
-                    width: 10.0,
-                  ),
-                ),
+                    ),
+                  );
+                },
               ),
               const SizedBox(
                 height: 10,
@@ -169,21 +193,44 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               const SizedBox(
                 height: 15.0,
               ),
-              Center(
-                child: Container(
-                  height: 50,
-                  width: screenWidth > 768 ? 300 : double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12.0),
-                    color: const Color.fromARGB(255, 141, 167, 245),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Add to Cart',
-                      style: appStyle(textColor, FontWeight.bold, 20),
+              Consumer<AddtoProductList>(
+                builder: (BuildContext context, value, child) {
+                  return Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        //  if (value.addToCart.contains(productItem)) {
+                        //               value.removeCart(productItem);
+                        //                 ShowCommonSnackBar.showMessage(
+                        //                 context, 'Removed from Cart',
+                        //               duration: const Duration(seconds: 1)
+
+                        //                 );
+                        //             } else {
+                        //               value.addCart(productItem);
+                        //                 ShowCommonSnackBar.showMessage(
+                        //                 context, 'Added to Cart',
+                        //               duration: const Duration(seconds: 1)
+
+                        //                 );
+                        //             }
+                      },
+                      child: Container(
+                        height: 50,
+                        width: screenWidth > 768 ? 300 : double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12.0),
+                          color: const Color.fromARGB(255, 141, 167, 245),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Add to Cart',
+                            style: appStyle(textColor, FontWeight.bold, 20),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
             ],
           ),

@@ -7,30 +7,30 @@ import 'package:shoes_ui/views/app_textStyle.dart';
 import 'package:shoes_ui/views/screens/product_details_screen.dart';
 import 'package:shoes_ui/widgets/snackBar_common.dart';
 
-class FavoriteScreen extends StatefulWidget {
-  const FavoriteScreen({super.key});
+class AddedProductList extends StatefulWidget {
+  const AddedProductList({super.key});
 
   @override
-  State<FavoriteScreen> createState() => _FavoriteScreenState();
+  State<AddedProductList> createState() => _AddedProductListState();
 }
 
-class _FavoriteScreenState extends State<FavoriteScreen> {
+class _AddedProductListState extends State<AddedProductList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Favorites'),
+        title: const Text('Product List'),
         centerTitle: true,
         backgroundColor: appBarColor,
         automaticallyImplyLeading: true,
       ),
       body: SingleChildScrollView(
         child: Center(
-          child: Consumer<FavoriteProducts>(
+          child: Consumer<AddtoProductList>(
             builder: (BuildContext context, value, child) {
-              if (value.favProduct.isEmpty) {
+              if (value.addToList.isEmpty) {
                 return const Center(
-                  child: Text('No Favorite Item Selected'),
+                  child: Text('No Products Selected'),
                 );
               } else {
                 return Padding(
@@ -38,12 +38,12 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                   child: ListView.separated(
                     shrinkWrap: true,
                     scrollDirection: Axis.vertical,
-                    itemCount: value.favProduct.length,
+                    itemCount: value.addToList.length,
                     itemBuilder: (BuildContext context, index) {
                       final productItem = products[index];
                       return GestureDetector(
-                        onTap: () {
-                          Navigator.of(context)
+                        onTap: (){
+                                Navigator.of(context)
                               .push(MaterialPageRoute(builder: (context) {
                             return ProductDetailsScreen(
                               name: productItem['title'],
@@ -57,12 +57,12 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                           }));
                         },
                         child: Container(
-                          height: 80,
+                          height: 90,
                           decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 209, 207, 207),
+                              color: const Color.fromARGB(255, 226, 225, 225),
                               borderRadius: BorderRadius.circular(12.0)),
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
+                            padding: const EdgeInsets.only(left: 10.0,top: 5.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
@@ -100,10 +100,12 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                 const Spacer(),
                                 IconButton(
                                   onPressed: () {
-                                    value.removeFav(productItem);
-                                    ShowCommonSnackBar.showMessage(
-                                        context, 'Removed Successfully',
-                                        duration: const Duration(seconds: 1));
+                                    value.removeProduct(productItem);
+                                      ShowCommonSnackBar.showMessage(
+                                          context, 'Removed Successfully',
+                                        duration: const Duration(seconds: 1)
+                                          
+                                          );
                                   },
                                   icon: const Icon(
                                     Icons.delete,

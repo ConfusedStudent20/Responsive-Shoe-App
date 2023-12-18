@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shoes_ui/models/brandModel.dart';
+import 'package:shoes_ui/provider/brand_build_provider.dart';
 import 'package:shoes_ui/utils/colors.dart';
 import 'package:shoes_ui/views/app_textStyle.dart';
-import 'package:shoes_ui/views/screens/add_to_cart_screen.dart';
 import 'package:shoes_ui/views/screens/product_details_screen.dart';
+import 'package:shoes_ui/widgets/snackBar_common.dart';
 
 class PopularMobileView extends StatefulWidget {
   const PopularMobileView({super.key});
@@ -85,21 +87,43 @@ class _PopularMobileViewState extends State<PopularMobileView> {
                             const Spacer(
                               flex: 1,
                             ),
-                            SizedBox(
-                              width: 30,
-                              height: 30,
-                              child: FloatingActionButton(
-                                onPressed: () {
-                                  Navigator.of(context).push(
-                                      MaterialPageRoute(builder: (context) {
-                                    return const AddToCartScreen();
-                                  }));
-                                },
-                                backgroundColor: Colors.blue,
-                                foregroundColor: Colors.white,
-                                child: const Icon(Icons.add, size: 20),
-                              ),
-                            ),
+                             Consumer<AddtoProductList>(
+                            builder: (BuildContext context, value, child) {
+                              return SizedBox(
+                                width: 30,
+                                height: 30,
+                                child: FloatingActionButton(
+                                  onPressed: () {
+                                    if (value.addToList.contains(productItem)) {
+                                      value.removeProduct(productItem);
+                                        ShowCommonSnackBar.showMessage(
+                                        context, 'Removed from Cart',
+                                      duration: const Duration(seconds: 1)
+                                        
+                                        );
+                                    } else {
+                                      value.addProduct(productItem);
+                                        ShowCommonSnackBar.showMessage(
+                                        context, 'Added to Cart',
+                                      duration: const Duration(seconds: 1)
+                                        
+                                        );
+                                    }
+                                  },
+                                  backgroundColor:
+                                      value.addToList.contains(productItem)
+                                          ? const Color.fromARGB(255, 0, 0, 0)
+                                          : Colors.blue,
+                                  child: Icon(
+                                    value.addToList.contains(productItem)
+                                        ? Icons.check
+                                        : Icons.add,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
                           ],
                         ),
                       ],

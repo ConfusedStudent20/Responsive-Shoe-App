@@ -18,6 +18,10 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: ((context) => BrandBuildProvider())),
+        ChangeNotifierProvider(create: ((context) => FavoriteProducts())),
+        ChangeNotifierProvider(create: ((context) => RatingProvider())),
+        ChangeNotifierProvider(create: ((context) => AddtoProductList())),
+        ChangeNotifierProvider(create: ((context) => ShoeSizeProvider())),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

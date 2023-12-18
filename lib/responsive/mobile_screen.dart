@@ -3,6 +3,7 @@ import 'package:shoes_ui/utils/colors.dart';
 import 'package:shoes_ui/views/app_textStyle.dart';
 import 'package:shoes_ui/views/screens/drawer_screen.dart';
 import 'package:shoes_ui/views/screens/favorite_scree.dart';
+import 'package:shoes_ui/views/screens/product_list.dart';
 import 'package:shoes_ui/widgets/product_widgets/company_build.dart';
 import 'package:shoes_ui/widgets/product_widgets/popular_products.dart';
 import 'package:shoes_ui/widgets/product_widgets/product_card_view.dart';
@@ -43,9 +44,21 @@ class _MobileScreenState extends State<MobileScreen> {
         backgroundColor: appBarColor,
         actions: [
           IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.notifications_none_outlined),
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                return const AddedProductList();
+              }));
+            },
+            icon: const Icon(Icons.list_alt_outlined),
           ),
+          // IconButton(
+          //   onPressed: () {
+          //     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+          //       return const AddToProductList();
+          //     }));
+          //   },
+          //   icon: const Icon(Icons.shopping_cart_checkout_outlined),
+          // ),
           IconButton(
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) {
