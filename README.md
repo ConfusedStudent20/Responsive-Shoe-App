@@ -1,16 +1,21 @@
-# shoes_ui
+# HomeScreen
+![image](https://github.com/BeeibekKunwar/Resposive_Shoe_UI/assets/82510817/c7d09159-e55f-4549-ab46-d5712b9b54d8)
 
-A new Flutter project.
+# Popular Products
+![image](https://github.com/BeeibekKunwar/Resposive_Shoe_UI/assets/82510817/ae7c2bd3-2509-4447-a030-6e1938132b65)
 
-## Getting Started
+#Product Detail Screen
+![image](https://github.com/BeeibekKunwar/Resposive_Shoe_UI/assets/82510817/14e8aa99-f621-42e6-84b6-91b951ec66fd)
 
-This project is a starting point for a Flutter application.
+#Favorite List Screen
+![image](https://github.com/BeeibekKunwar/Resposive_Shoe_UI/assets/82510817/58f21df8-5a4d-4364-8407-4944928957cc)
 
-A few resources to get you started if this is your first Flutter project:
+#Product List Screen
+![image](https://github.com/BeeibekKunwar/Resposive_Shoe_UI/assets/82510817/d6a18bfb-0da6-4b3a-9c13-253c8d17d63e)
+#Drawer Screen
+![image](https://github.com/BeeibekKunwar/Resposive_Shoe_UI/assets/82510817/b57cf6eb-8bc4-434d-9fc5-27b46cf9c8d3)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+
+
